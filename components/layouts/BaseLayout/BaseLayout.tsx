@@ -5,7 +5,12 @@ interface ILayoutProps {
 }
 
 function BaseLayout({ children }: ILayoutProps): JSX.Element {
-  return <div>{children}</div>;
+  return (
+    <div className={styles.Container}>
+      <p>I am in Base Layout</p>
+      {children}
+    </div>
+  );
 }
 
 export { BaseLayout };

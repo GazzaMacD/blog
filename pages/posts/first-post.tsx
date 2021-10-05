@@ -4,10 +4,11 @@ import Image from 'next/image';
 
 export default function FirstPost(): JSX.Element {
   const img = '/img/home/blog-1200x600-former-ex.jpg';
+  const title = 'My First Post';
   return (
     <>
       <Head>
-        <title>Create Next App</title>
+        <title>{title ? `${title} | Blog` : 'Blog'}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>First Post</h1>
