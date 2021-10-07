@@ -33,5 +33,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-#image files
+#Project specific 
+project_files/
 /public/img/
