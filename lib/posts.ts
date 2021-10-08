@@ -1,14 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { IPost, IPostParams } from '@/common/types';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
-
-export interface IPost {
-  id: string;
-  title: string;
-  date: string;
-}
 
 export function getSortedPostsData(): IPost[] {
   // Get file names under /posts
@@ -45,4 +40,29 @@ export function getSortedPostsData(): IPost[] {
       return 0;
     }
   });
+}
+
+export function getAllPostIds(): IPostParams[] {
+  const fileNames = fs.readdirSync(postsDirectory);
+  return fileNames.map((fileName) => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, ''),
+      },
+    };
+  });
+}
+
+export function getPostData(id: string): IPost {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  // Use matter to parse metadata
+  const matterResult = matter(fileContents);
+  const date = matterResult.data.date;
+  const title = matterResult.data.title;
+  return {
+    id,
+    date,
+    title,
+  };
 }
