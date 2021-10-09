@@ -5,8 +5,12 @@ export interface IPostId {
 export interface IPostParams {
   params: IPostId;
 }
-export interface IPost {
+export interface IPostData {
   id: string;
   title: string;
   date: string;
+}
+
+export interface IPost extends IPostData {
+  contentHtml: string;
 }

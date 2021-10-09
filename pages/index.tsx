@@ -7,6 +7,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/pages/Home.module.scss';
 */
+import Link from 'next/link';
 import utilStyles from '@/styles/utils.module.scss';
 import { getSortedPostsData, IPost } from '../lib/posts';
 
@@ -34,10 +35,9 @@ export default function Home({ allPostsData }: IHomeProps): JSX.Element {
       <ul className={utilStyles.list}>
         {allPostsData.map(({ id, date, title }) => (
           <li className={utilStyles.listItem} key={id}>
-            {title}
-            <br />
-            {id}
-            <br />
+            <Link href={`/posts/${encodeURIComponent(id)}`}>
+              <a>{title}</a>
+            </Link>{' '}
             {date}
           </li>
         ))}

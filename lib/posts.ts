@@ -1,11 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { IPost, IPostParams } from '@/common/types';
+import remark from 'remark';
+import html from 'remark-html';
+import { IPost, IPostParams, IPostData } from '@/common/types';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
-export function getSortedPostsData(): IPost[] {
+export function getSortedPostsData(): IPostData[] {
   // Get file names under /posts
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map((fileName) => {
@@ -53,16 +55,21 @@ export function getAllPostIds(): IPostParams[] {
   });
 }
 
-export function getPostData(id: string): IPost {
+export async function getPostData(id: string): Promise<IPost> {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   // Use matter to parse metadata
   const matterResult = matter(fileContents);
-  const date = matterResult.data.date;
-  const title = matterResult.data.title;
+  const { date, title } = matterResult.data;
+  // remark to conver markdown into html string
+  const processedContent = await remark()
+    .use(html)
+    .process(matterResult.content);
+  const contentHtml = processedContent.toString();
   return {
     id,
     date,
     title,
+    contentHtml,
   };
 }
